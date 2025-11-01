@@ -383,37 +383,6 @@ Final Amounts:
 
 ---
 
-## 📸 Screenshots
-
-### Application Overview
-
-![Application Overview](docs/images/app-overview.png)
-_Main application interface with step navigation_
-
-### Receipt Upload
-
-![Receipt Upload](docs/images/upload-interface.png)
-_Drag-and-drop file upload interface_
-
-### OCR Results
-
-![OCR Results](docs/images/ocr-results.png)
-_Automatically extracted bill information_
-
-### Bill Splitting
-
-![Bill Splitting](docs/images/splitting-interface.png)
-_Interactive item splitting interface_
-
-### Final Summary
-
-![Final Summary](docs/images/final-summary.png)
-_Final calculation results with export option_
-
-### Mobile View
-
-![Mobile View](docs/images/mobile-view.png)
-_Responsive design on mobile devices_
 
 ---
 
