@@ -1,0 +1,67 @@
+version: "3.8"
+
+services:
+  # PostgreSQL Database
+  postgres:
+    image: postgres:15-alpine
+    container_name: splitter-postgres
+    environment:
+      POSTGRES_DB: splitter
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: hello
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - splitter-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Spring Boot Application
+  splitter-app:
+    build:
+      context: ./splitter
+      dockerfile: Dockerfile
+    container_name: splitter-backend
+    env_file:
+      - .env
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/splitter
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: hello
+      SPRING_JPA_HIBERNATE_DDL_AUTO: update
+      OPENAI_API_KEY: ${OPENAI_API_KEY}
+    ports:
+      - "8080:8080"
+    depends_on:
+      - postgres
+    networks:
+      - splitter-network
+    restart: unless-stopped
+
+  # Frontend (React App)
+  splitter-frontend:
+    build:
+      context: ./splitter_frontend
+      dockerfile: Dockerfile
+    container_name: splitter-frontend
+    ports:
+      - "3000:3000"
+    environment:
+      REACT_APP_API_URL: http://localhost:8080
+    depends_on:
+      - splitter-app
+    networks:
+      - splitter-network
+    restart: unless-stopped
+
+volumes:
+  postgres_data:
+
+networks:
+  splitter-network:
+    driver: bridge
